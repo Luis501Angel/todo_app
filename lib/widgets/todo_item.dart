@@ -6,9 +6,9 @@ class ToDoItem extends StatelessWidget {
 
   final ToDo toDo;
   final onToDoChanged;
-  final ontItemDelete;
+  final onDeleteItem;
 
-  const ToDoItem({Key? key, required this.toDo, required this.onToDoChanged, required this.ontItemDelete}) : super(key: key);
+  const ToDoItem({Key? key, required this.toDo, required this.onToDoChanged, required this.onDeleteItem}) : super(key: key);
 
 
   @override
@@ -46,7 +46,8 @@ class ToDoItem extends StatelessWidget {
             iconSize: 18,
             icon: const Icon(Icons.delete),
             onPressed: () {
-              print('Click on delete');
+              // print('Click on delete');
+               onDeleteItem(toDo.id);
             },
           ),
         ),

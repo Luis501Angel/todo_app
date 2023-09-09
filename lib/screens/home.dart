@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
                           ToDoItem(
                             toDo: item,
                             onToDoChanged: _handleToDoChange,
-                            ontItemDelete: () {},
+                            onDeleteItem: _deleteToDoItem,
                           ),
                       ],
                     ),
@@ -58,14 +58,16 @@ class _HomeState extends State<Home> {
                         const EdgeInsets.only(bottom: 20, right: 20, left: 20),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    decoration:
-                        const BoxDecoration(color: Colors.white, boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 10.0,
-                          spreadRadius: 0.0)
-                    ]),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(0.0, 0.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 0.0),
+                        ],
+                        borderRadius: BorderRadius.circular(10)),
                     child: const TextField(
                         decoration: InputDecoration(
                             hintText: 'Add a new item',
@@ -80,10 +82,9 @@ class _HomeState extends State<Home> {
                       ),
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: tdBlue,
-                        minimumSize: const Size(60, 60),
-                        elevation: 10
-                      ),
+                          backgroundColor: tdBlue,
+                          minimumSize: const Size(60, 60),
+                          elevation: 10),
                     ),
                   )
                 ],
@@ -95,7 +96,13 @@ class _HomeState extends State<Home> {
 
   void _handleToDoChange(ToDo toDo) {
     setState(() {
-      toDo.isDone =!toDo.isDone;
+      toDo.isDone = !toDo.isDone;
+    });
+  }
+
+  void _deleteToDoItem(int id) {
+    setState(() {
+      todoList.removeWhere((item) => item.id == id);
     });
   }
 
