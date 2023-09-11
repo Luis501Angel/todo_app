@@ -12,7 +12,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todoList = ToDo.todoList();
+  List<ToDo> _foundToDo = [];
   final _todoController = TextEditingController();
+
+  @override
+  void initState() {
+    _foundToDo = todoList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,7 @@ class _HomeState extends State<Home> {
                                 fontSize: 30, fontWeight: FontWeight.w500),
                           ),
                         ),
-                        for (ToDo item in todoList)
+                        for (ToDo item in _foundToDo)
                           ToDoItem(
                             toDo: item,
                             onToDoChanged: _handleToDoChange,
@@ -113,10 +120,28 @@ class _HomeState extends State<Home> {
   void _addToDoItem(String text) {
     print(text);
     setState(() {
-      todoList.add(ToDo(id: DateTime.now().microsecondsSinceEpoch.toInt(), text: text));
+      todoList.add(
+          ToDo(id: DateTime.now().microsecondsSinceEpoch.toInt(), text: text));
     });
 
     _todoController.clear();
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<ToDo> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = todoList;
+    } else {
+      results = todoList
+          .where((element) => element.text!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      _foundToDo = results;
+    });
   }
 
   Widget searchBox() {
@@ -124,8 +149,9 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
-      child: const TextField(
-        decoration: InputDecoration(
+      child: TextField(
+        onChanged: (value) => _runFilter(value),
+        decoration: const InputDecoration(
             contentPadding: EdgeInsets.all(0),
             prefixIcon: Icon(
               Icons.search,
